@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { convertBase, InvalidDigitError } from './basr'
+import { convertBase, InvalidDigitError } from './baseroo'
 
 test('convertBase should convert base 16 to 10', () => {
 	const input = '8f'

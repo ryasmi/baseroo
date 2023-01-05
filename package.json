@@ -1,21 +1,21 @@
 {
-	"name": "basr",
+	"name": "baseroo",
 	"version": "0.0.0-development",
 	"description": "Converts values from one base to another between 2-62",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ryansmith94/basr.git"
+		"url": "https://github.com/ryansmith94/baseroo.git"
 	},
 	"type": "module",
-	"source": "src/basr.ts",
+	"source": "src/baseroo.ts",
 	"exports": {
-		"require": "./dist/basr.cjs",
-		"default": "./dist/basr.modern.js"
+		"require": "./dist/baseroo.cjs",
+		"default": "./dist/baseroo.modern.js"
 	},
-	"main": "dist/basr.cjs",
-	"module": "dist/basr.module.js",
-	"unpkg": "dist/basr.umd.js",
-	"typings": "dist/basr.d.ts",
+	"main": "dist/baseroo.cjs",
+	"module": "dist/baseroo.module.js",
+	"unpkg": "dist/baseroo.umd.js",
+	"typings": "dist/baseroo.d.ts",
 	"author": "ryansmith94",
 	"license": "MIT",
 	"files": [

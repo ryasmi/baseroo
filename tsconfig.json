@@ -11,5 +11,5 @@
 		"sourceMap": true
 	},
 	"include": ["./src/**/*.ts"],
-	"files": ["src/basr.ts"]
+	"files": ["src/baseroo.ts"]
 }
