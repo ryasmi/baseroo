@@ -21,3 +21,11 @@ test('convertBase should convert an empty input string to 0', () => {
 	const expectedOutput = '0'
 	assert.strictEqual(actualOutput, expectedOutput)
 })
+
+test('convertBase should convert BigInts too', () => {
+	const input =
+		'4ef57aa335b86bce90cd99144be26fa47645c36624eeb54ae153bc67861f9a7ad96e23e0d200348bd6a442ef96bd04a2c'
+	const interimOutput = convertBase(input, 16, 10)
+	const actualOutput = convertBase(interimOutput, 10, 16)
+	assert.strictEqual(actualOutput, input)
+})
