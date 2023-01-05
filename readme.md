@@ -20,4 +20,4 @@ const base10Value = convertBase(base16Value, 16, 10) // '143'
 
 ### Background
 
-Baseroo was created from a [2015 Stack Overflow Answer](https://stackoverflow.com/a/32480941/1221906) from a question asking "How do you convert numbers between different bases in JavaScript?". This answer and [the Gist code snippet](https://gist.github.com/ryansmith94/91d7fd30710264affeb9) received some comments requesting some changes, so it was converted to a package with tests and documentation to continue its development and make it easier to use as bug fixes and improvements are made.
+Baseroo was created from a [2015 Stack Overflow Answer](https://stackoverflow.com/a/32480941/1221906) from a question asking "How do you convert numbers between different bases in JavaScript?". This answer and [the Gist code snippet](https://gist.github.com/ryansmith94/91d7fd30710264affeb9) received some comments requesting some changes, so it was converted to a package with tests and documentation in January 2023 to continue its development and make it easier to use as bug fixes and improvements are made.
