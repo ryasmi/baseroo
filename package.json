@@ -94,7 +94,7 @@
 			]
 		}
 	},
-	"releases": {
+	"release": {
 		"branches": [
 			"main"
 		]
