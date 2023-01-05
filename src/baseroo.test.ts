@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { convertBase, InvalidDigitError } from './baseroo'
+import { convertBase, defaultAlphabet, InvalidBaseError, InvalidDigitError } from './baseroo'
 
 test('convertBase should convert base 16 to 10', () => {
 	const input = '8f'
@@ -28,4 +28,24 @@ test('convertBase should convert BigInts too', () => {
 	const interimOutput = convertBase(input, 16, 10)
 	const actualOutput = convertBase(interimOutput, 10, 16)
 	assert.strictEqual(actualOutput, input)
+})
+
+test('constrain should error for invalid fromBase', () => {
+	const input = '8f'
+	assert.throws(() => {
+		convertBase(input, 1, 10)
+	}, InvalidBaseError)
+	assert.throws(() => {
+		convertBase(input, defaultAlphabet.length + 1, 10)
+	}, InvalidBaseError)
+})
+
+test('constrain should error for invalid toBase', () => {
+	const input = '8f'
+	assert.throws(() => {
+		convertBase(input, 16, 1)
+	}, InvalidBaseError)
+	assert.throws(() => {
+		convertBase(input, 16, defaultAlphabet.length + 1)
+	}, InvalidBaseError)
 })

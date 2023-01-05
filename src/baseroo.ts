@@ -6,6 +6,12 @@ export class InvalidDigitError extends BaseError {
 	}
 }
 
+export class InvalidBaseError extends BaseError {
+	constructor(public ref: string, public base: number, public maxBase: number) {
+		super(`'${ref}' must be between 2 and ${maxBase} not '${base}'.`)
+	}
+}
+
 function bigIntPow(x: bigint, y: bigint): bigint {
 	const ZERO = BigInt(0)
 	if (y === ZERO) return BigInt(1)
@@ -15,8 +21,18 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 	return x * p2 * p2
 }
 
+export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
+
 export function convertBase(value: string, fromBase: number, toBase: number): string {
-	const range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('')
+	const range = defaultAlphabet.split('')
+
+	if (fromBase < 2 || fromBase > range.length) {
+		throw new InvalidBaseError('fromBase', fromBase, range.length)
+	}
+	if (toBase < 2 || toBase > range.length) {
+		throw new InvalidBaseError('toBase', toBase, range.length)
+	}
+
 	const fromRange = range.slice(0, fromBase)
 	const toRange = range.slice(0, toBase)
 
