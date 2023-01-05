@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"lib": ["ES2020.BigInt"],
+		"outDir": "dist",
+		"declaration": true,
+		"sourceMap": true
+	},
+	"include": ["./src/**/*.ts"],
+	"files": ["src/basr.ts"]
+}

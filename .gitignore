@@ -1,0 +1,8 @@
+.DS_STORE
+/.nyc_output
+/coverage
+/dist
+/node_modules
+/notes.md
+/npm-debug.log
+/.eslintcache
