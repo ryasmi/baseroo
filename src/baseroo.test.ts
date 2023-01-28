@@ -8,8 +8,22 @@ test('convertBase should convert base 16 to 10', () => {
 	assert.strictEqual(actualOutput, expectedOutput)
 })
 
-test('constrain should error for invalid digits', () => {
+test('convertBase should convert base 16 to 2', () => {
+	const base16Input = 'a'
+	const actualOutput = convertBase(base16Input, 16, 2)
+	const expectedOutput = '1010'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
+
+test('constrain should error for invalid digits in interger', () => {
 	const input = '8F'
+	assert.throws(() => {
+		convertBase(input, 16, 10)
+	}, InvalidDigitError)
+})
+
+test('constrain should error for invalid digits in fractional', () => {
+	const input = '8f.F'
 	assert.throws(() => {
 		convertBase(input, 16, 10)
 	}, InvalidDigitError)
@@ -48,4 +62,25 @@ test('constrain should error for invalid toBase', () => {
 	assert.throws(() => {
 		convertBase(input, 16, defaultAlphabet.length + 1)
 	}, InvalidBaseError)
+})
+
+test('convertBase should convert base 16 float to 10', () => {
+	const base16Input = '8f.8'
+	const actualOutput = convertBase(base16Input, 16, 10)
+	const expectedOutput = '143.5'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
+
+test('convertBase should convert base 16 float to 2', () => {
+	const base16Input = 'a.8'
+	const actualOutput = convertBase(base16Input, 16, 2)
+	const expectedOutput = '1010.1'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
+
+test('convertBase should convert base 16 float to 10 upto a precision of 10', () => {
+	const base16Input = '8f.3333333333'
+	const actualOutput = convertBase(base16Input, 16, 10)
+	const expectedOutput = '143.1999999999'
+	assert.strictEqual(actualOutput, expectedOutput)
 })
