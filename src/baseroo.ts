@@ -24,20 +24,30 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
 const defaultAlphabetRange = defaultAlphabet.split('')
 
-function convertToBase10(value: string, fromBase: number, fromAlphabet: string[]) {
-	const fromRange = fromAlphabet.slice(0, fromBase)
-	const fromBaseBig = BigInt(fromBase)
+function convertToBase10(value: string, fromAlphabet: string[]): bigint {
+	const fromBase = BigInt(fromAlphabet.length)
 
 	return value
 		.split('')
 		.reverse()
 		.reduce(function (carry: bigint, digit: string, index: number): bigint {
-			const fromIndex = fromRange.indexOf(digit)
+			const fromIndex = fromAlphabet.indexOf(digit)
 			if (fromIndex === -1) {
-				throw new InvalidDigitError(digit, fromBase)
+				throw new InvalidDigitError(digit, fromAlphabet.length)
 			}
-			return carry + BigInt(fromIndex) * bigIntPow(fromBaseBig, BigInt(index))
+			return carry + BigInt(fromIndex) * bigIntPow(fromBase, BigInt(index))
 		}, BigInt(0))
+}
+
+function convertFromBase10(base10Value: bigint, toAlphabet: string[]): string {
+	const toBase = BigInt(toAlphabet.length)
+
+	let newValue = ''
+	while (base10Value > 0) {
+		newValue = toAlphabet[Number(base10Value % toBase)] + newValue
+		base10Value = (base10Value - (base10Value % toBase)) / toBase
+	}
+	return newValue || '0'
 }
 
 export function convertBase(value: string, fromBase: number, toBase: number): string {
@@ -50,15 +60,6 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 		throw new InvalidBaseError('toBase', toBase, range.length)
 	}
 
-	let base10Value = convertToBase10(value, fromBase, range)
-
-	const toRange = range.slice(0, toBase)
-	const toBaseBig = BigInt(toBase)
-
-	let newValue = ''
-	while (base10Value > 0) {
-		newValue = toRange[Number(base10Value % toBaseBig)] + newValue
-		base10Value = (base10Value - (base10Value % toBaseBig)) / toBaseBig
-	}
-	return newValue || '0'
+	const base10Value = convertToBase10(value, range.slice(0, fromBase))
+	return convertFromBase10(base10Value, range.slice(0, toBase))
 }
