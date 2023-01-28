@@ -1,7 +1,7 @@
 {
 	"name": "baseroo",
 	"version": "0.0.0-development",
-	"description": "Converts values from one base to another between 2-64",
+	"description": "Converts float values from one base to another between 2-64",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/ryansmith94/baseroo.git"
