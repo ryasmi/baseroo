@@ -22,24 +22,13 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 }
 
 export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
+const defaultAlphabetRange = defaultAlphabet.split('')
 
-export function convertBase(value: string, fromBase: number, toBase: number): string {
-	const range = defaultAlphabet.split('')
-
-	if (fromBase < 2 || fromBase > range.length) {
-		throw new InvalidBaseError('fromBase', fromBase, range.length)
-	}
-	if (toBase < 2 || toBase > range.length) {
-		throw new InvalidBaseError('toBase', toBase, range.length)
-	}
-
-	const fromRange = range.slice(0, fromBase)
-	const toRange = range.slice(0, toBase)
-
+function convertToBase10(value: string, fromBase: number, fromAlphabet: string[]) {
+	const fromRange = fromAlphabet.slice(0, fromBase)
 	const fromBaseBig = BigInt(fromBase)
-	const toBaseBig = BigInt(toBase)
 
-	let decValue = value
+	return value
 		.split('')
 		.reverse()
 		.reduce(function (carry: bigint, digit: string, index: number): bigint {
@@ -49,11 +38,27 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 			}
 			return carry + BigInt(fromIndex) * bigIntPow(fromBaseBig, BigInt(index))
 		}, BigInt(0))
+}
+
+export function convertBase(value: string, fromBase: number, toBase: number): string {
+	const range = defaultAlphabetRange
+
+	if (fromBase < 2 || fromBase > range.length) {
+		throw new InvalidBaseError('fromBase', fromBase, range.length)
+	}
+	if (toBase < 2 || toBase > range.length) {
+		throw new InvalidBaseError('toBase', toBase, range.length)
+	}
+
+	let base10Value = convertToBase10(value, fromBase, range)
+
+	const toRange = range.slice(0, toBase)
+	const toBaseBig = BigInt(toBase)
 
 	let newValue = ''
-	while (decValue > 0) {
-		newValue = toRange[Number(decValue % toBaseBig)] + newValue
-		decValue = (decValue - (decValue % toBaseBig)) / toBaseBig
+	while (base10Value > 0) {
+		newValue = toRange[Number(base10Value % toBaseBig)] + newValue
+		base10Value = (base10Value - (base10Value % toBaseBig)) / toBaseBig
 	}
 	return newValue || '0'
 }
