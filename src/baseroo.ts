@@ -12,10 +12,12 @@ export class InvalidBaseError extends BaseError {
 	}
 }
 
+const ZERO = BigInt(0)
+const ONE = BigInt(1)
+const TWO = BigInt(2)
+
 function bigIntPow(x: bigint, y: bigint): bigint {
-	const ZERO = BigInt(0)
-	if (y === ZERO) return BigInt(1)
-	const TWO = BigInt(2)
+	if (y === ZERO) return ONE
 	const p2 = bigIntPow(x, y / TWO)
 	if (y % TWO === ZERO) return p2 * p2
 	return x * p2 * p2
@@ -24,13 +26,13 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
 const defaultAlphabetRange = defaultAlphabet.split('')
 
-function convertToBase10(value: string, fromAlphabet: string[]): bigint {
+function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): bigint {
 	const fromBase = BigInt(fromAlphabet.length)
 
-	return value
+	return integerValue
 		.split('')
 		.reverse()
-		.reduce(function (carry: bigint, digit: string, index: number): bigint {
+		.reduce((carry, digit, index) => {
 			const fromIndex = fromAlphabet.indexOf(digit)
 			if (fromIndex === -1) {
 				throw new InvalidDigitError(digit, fromAlphabet.length)
@@ -39,15 +41,39 @@ function convertToBase10(value: string, fromAlphabet: string[]): bigint {
 		}, BigInt(0))
 }
 
-function convertFromBase10(base10Value: bigint, toAlphabet: string[]): string {
+function convertToBase10Fractional(fractionalValue: string, fromAlphabet: string[]): number {
+	const fromBase = fromAlphabet.length
+	return fractionalValue.split('').reduce((carry, digit, index) => {
+		const fromIndex = fromAlphabet.indexOf(digit)
+		if (fromIndex === -1) {
+			throw new InvalidDigitError(digit, fromAlphabet.length)
+		}
+		return carry + fromIndex / fromBase ** (index + 1)
+	}, 0)
+}
+
+function convertFromBase10Integer(base10Integer: bigint, toAlphabet: string[]): string {
 	const toBase = BigInt(toAlphabet.length)
 
-	let newValue = ''
-	while (base10Value > 0) {
-		newValue = toAlphabet[Number(base10Value % toBase)] + newValue
-		base10Value = (base10Value - (base10Value % toBase)) / toBase
+	let value = ''
+	while (base10Integer > 0) {
+		value = toAlphabet[Number(base10Integer % toBase)] + value
+		base10Integer = (base10Integer - (base10Integer % toBase)) / toBase
 	}
-	return newValue || '0'
+
+	return value || '0'
+}
+
+function convertFromBase10Fractional(base10Fractional: number, toAlphabet: string[]): string {
+	const precision = 10
+	const toBase = toAlphabet.length
+	let value = ''
+	for (let i = 0; i < precision && base10Fractional !== 0; i++) {
+		const fractDigit = Math.floor(base10Fractional * toBase)
+		value += toAlphabet[fractDigit]
+		base10Fractional = base10Fractional * toBase - fractDigit
+	}
+	return value
 }
 
 export function convertBase(value: string, fromBase: number, toBase: number): string {
@@ -60,6 +86,17 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 		throw new InvalidBaseError('toBase', toBase, range.length)
 	}
 
-	const base10Value = convertToBase10(value, range.slice(0, fromBase))
-	return convertFromBase10(base10Value, range.slice(0, toBase))
+	const [integerPart, fractionalPart = ''] = value.split('.')
+
+	const base10Integer = convertToBase10Integer(integerPart, range.slice(0, fromBase))
+	const toBaseInteger = convertFromBase10Integer(base10Integer, range.slice(0, toBase))
+
+	if (fractionalPart !== '') {
+		const base10Fractional = convertToBase10Fractional(fractionalPart, range.slice(0, fromBase))
+		const toBaseFractional = convertFromBase10Fractional(base10Fractional, range.slice(0, toBase))
+		console.log({ value, base10Fractional, toBaseFractional })
+		return toBaseInteger + '.' + toBaseFractional
+	}
+
+	return toBaseInteger
 }

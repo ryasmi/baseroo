@@ -14,8 +14,10 @@
 // Install it with `npm i baseroo`
 import { convertBase } from 'baseroo'
 
-const base16Value = '8f'
-const base10Value = convertBase(base16Value, 16, 10) // '143'
+const base16Value = '8f.3333333333'
+
+// Works for floating point numbers to a precision of 10 places.
+const base10Value = convertBase(base16Value, 16, 10) // '143.1999999999'
 ```
 
 ### Background
