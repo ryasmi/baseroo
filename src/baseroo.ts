@@ -87,14 +87,15 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 	}
 
 	const [integerPart, fractionalPart = ''] = value.split('.')
-
-	const base10Integer = convertToBase10Integer(integerPart, range.slice(0, fromBase))
-	const toBaseInteger = convertFromBase10Integer(base10Integer, range.slice(0, toBase))
+	const fromRange = range.slice(0, fromBase)
+	const toRange = range.slice(0, toBase)
+	
+	const base10Integer = convertToBase10Integer(integerPart, fromRange)
+	const toBaseInteger = convertFromBase10Integer(base10Integer, toRange)
 
 	if (fractionalPart !== '') {
-		const base10Fractional = convertToBase10Fractional(fractionalPart, range.slice(0, fromBase))
-		const toBaseFractional = convertFromBase10Fractional(base10Fractional, range.slice(0, toBase))
-		console.log({ value, base10Fractional, toBaseFractional })
+		const base10Fractional = convertToBase10Fractional(fractionalPart, fromRange)
+		const toBaseFractional = convertFromBase10Fractional(base10Fractional, toRange)
 		return toBaseInteger + '.' + toBaseFractional
 	}
 
