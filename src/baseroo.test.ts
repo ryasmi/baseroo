@@ -84,3 +84,17 @@ test('convertBase should convert base 16 float to 10 upto a precision of 10', ()
 	const expectedOutput = '143.1999999999'
 	assert.strictEqual(actualOutput, expectedOutput)
 })
+
+test('convertBase should convert negative base 16 to 10', () => {
+	const input = '-8f'
+	const actualOutput = convertBase(input, 16, 10)
+	const expectedOutput = '-143'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
+
+test('convertBase should convert negative float base 16 to 10', () => {
+	const input = '-8f.8'
+	const actualOutput = convertBase(input, 16, 10)
+	const expectedOutput = '-143.5'
+	assert.strictEqual(actualOutput, expectedOutput)
+})

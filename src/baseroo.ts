@@ -86,18 +86,21 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 		throw new InvalidBaseError('toBase', toBase, range.length)
 	}
 
-	const [integerPart, fractionalPart = ''] = value.split('.')
+	const isNegative = value[0] === '-'
+	const toBaseSign = isNegative ? '-' : ''
+	const absoluteValue = isNegative ? value.substring(1) : value
+	const [integerPart, fractionalPart = ''] = absoluteValue.split('.')
 	const fromRange = range.slice(0, fromBase)
 	const toRange = range.slice(0, toBase)
-	
+
 	const base10Integer = convertToBase10Integer(integerPart, fromRange)
 	const toBaseInteger = convertFromBase10Integer(base10Integer, toRange)
 
 	if (fractionalPart !== '') {
 		const base10Fractional = convertToBase10Fractional(fractionalPart, fromRange)
 		const toBaseFractional = convertFromBase10Fractional(base10Fractional, toRange)
-		return toBaseInteger + '.' + toBaseFractional
+		return toBaseSign + toBaseInteger + '.' + toBaseFractional
 	}
 
-	return toBaseInteger
+	return toBaseSign + toBaseInteger
 }
