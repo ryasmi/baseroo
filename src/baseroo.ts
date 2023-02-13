@@ -26,6 +26,13 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
 const defaultAlphabetRange = defaultAlphabet.split('')
 
+function convertToBase10Value(value: string, fromAlphabet: string[]): bigint {
+	const [integerPart, fractionalPart = ''] = value.split('.')
+	const base10Integer = convertToBase10Integer(integerPart, fromAlphabet)
+	const base10Fractional = convertToBase10Fractional(fractionalPart, fromAlphabet)
+	return base10Integer + BigInt(base10Fractional)
+}
+
 function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): bigint {
 	const fromBase = BigInt(fromAlphabet.length)
 
@@ -76,8 +83,11 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	return value
 }
 
-export function convertBase(value: string, fromBase: number, toBase: number): string {
+export function convertBase(value: string, fromBase: number, toBase: number, options?: {
+	increment?: number
+}): string {
 	const range = defaultAlphabetRange
+	const increment = options?.increment ?? 0
 
 	if (fromBase < 2 || fromBase > range.length) {
 		throw new InvalidBaseError('fromBase', fromBase, range.length)
@@ -86,13 +96,11 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 		throw new InvalidBaseError('toBase', toBase, range.length)
 	}
 
-	const [integerPart, fractionalPart = ''] = value.split('.')
+	const base10Value = convertToBase10Value(value, range.slice(0, fromBase)) + increment
 
-	const base10Integer = convertToBase10Integer(integerPart, range.slice(0, fromBase))
 	const toBaseInteger = convertFromBase10Integer(base10Integer, range.slice(0, toBase))
 
 	if (fractionalPart !== '') {
-		const base10Fractional = convertToBase10Fractional(fractionalPart, range.slice(0, fromBase))
 		const toBaseFractional = convertFromBase10Fractional(base10Fractional, range.slice(0, toBase))
 		console.log({ value, base10Fractional, toBaseFractional })
 		return toBaseInteger + '.' + toBaseFractional

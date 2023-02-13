@@ -84,3 +84,21 @@ test('convertBase should convert base 16 float to 10 upto a precision of 10', ()
 	const expectedOutput = '143.1999999999'
 	assert.strictEqual(actualOutput, expectedOutput)
 })
+
+test('convertBase should increment a base 10 float by a positive float', () => {
+	const actualOutput = convertBase('10.1', 10, 10, { increment: 5.5 })
+	const expectedOutput = '15.6'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
+
+test('convertBase should decrement a base 10 float by a negative float', () => {
+	const actualOutput = convertBase('10.1', 10, 10, { increment: -5.5 })
+	const expectedOutput = '4.6'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
+
+test('convertBase should decrement a base 10 float by a negative float when carrying 1', () => {
+	const actualOutput = convertBase('10.6', 10, 10, { increment: -5.5 })
+	const expectedOutput = '5.1'
+	assert.strictEqual(actualOutput, expectedOutput)
+})
