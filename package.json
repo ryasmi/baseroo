@@ -4,7 +4,7 @@
 	"description": "Converts positive & negative float values from one base to another between 2-64",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ryansmith94/baseroo.git"
+		"url": "https://github.com/ryasmi/baseroo.git"
 	},
 	"type": "module",
 	"source": "src/baseroo.ts",
