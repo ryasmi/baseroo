@@ -73,7 +73,7 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	return value
 }
 
-export function convertBaseShim(range: string[], value: string, fromBase: number, toBase: number): string {
+function convertBaseShim(range: string[], value: string, fromBase: number, toBase: number): string {
 	if (fromBase < 2 || fromBase > range.length) {
 		throw new InvalidBaseError('fromBase', fromBase, range.length)
 	}
