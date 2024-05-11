@@ -23,7 +23,7 @@
 		"readme.md"
 	],
 	"scripts": {
-		"prepare": "husky install",
+		"prepare": "husky",
 		"test": "jest",
 		"build": "microbundle"
 	},
