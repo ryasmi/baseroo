@@ -4,7 +4,7 @@
 	<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-d9207b.svg" alt="License: MIT"></a>
 	<a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80%20-semantic%20release-d9207b.svg" alt="Uses Semantic Release to correctly bump versions especially for breaking changes"></a>
 	<a href="https://renovatebot.com/"><img src="https://img.shields.io/badge/%F0%9F%94%84%F0%9F%A4%96%20-renovate%20bot-d9207b.svg" alt="Uses Renovate to keep dependencies updated"></a>
-	<a href="https://codecov.io/gh/ryansmith94/baseroo"><img alt="Main branch coverage percentage from Codecov" src="https://codecov.io/gh/ryansmith94/baseroo/branch/main/graph/badge.svg" /></a>
+	<a href="https://codecov.io/gh/ryasmi/baseroo"><img alt="Main branch coverage percentage from Codecov" src="https://codecov.io/gh/ryasmi/baseroo/branch/main/graph/badge.svg" /></a>
 	<a href="https://bundlephobia.com/result?p=baseroo"><img alt="Package size from BundlePhobia" src="https://img.shields.io/bundlephobia/minzip/baseroo.svg" /></a>
 	<div>
 	</div>
