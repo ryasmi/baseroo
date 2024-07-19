@@ -4,7 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.x.y   | :white_check_mark: |
+| 2.x.y   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
