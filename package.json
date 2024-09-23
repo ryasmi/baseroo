@@ -40,7 +40,7 @@
 		"@typescript-eslint/eslint-plugin": "8.6.0",
 		"@typescript-eslint/parser": "8.6.0",
 		"commitlint": "19.5.0",
-		"eslint": "8.57.1",
+		"eslint": "9.11.1",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-deprecation": "3.0.0",
 		"husky": "9.1.6",
