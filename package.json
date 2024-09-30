@@ -66,6 +66,7 @@
 		}
 	},
 	"prettier": {
+		"filepath": "**/*.{js,ts,json,tsx,jsx}",
 		"trailingComma": "es5",
 		"tabWidth": 2,
 		"useTabs": true,
@@ -102,28 +103,6 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"eslintConfig": {
-		"root": true,
-		"parser": "@typescript-eslint/parser",
-		"parserOptions": {
-			"ecmaVersion": 2020,
-			"sourceType": "module",
-			"project": "./tsconfig.json"
-		},
-		"plugins": [
-			"@typescript-eslint",
-			"deprecation"
-		],
-		"extends": [
-			"eslint:recommended",
-			"plugin:@typescript-eslint/recommended",
-			"prettier"
-		],
-		"rules": {
-			"@typescript-eslint/explicit-module-boundary-types": "off",
-			"deprecation/deprecation": "warn"
-		}
 	},
 	"lint-staged": {
 		"*.js": "eslint --cache --fix",
