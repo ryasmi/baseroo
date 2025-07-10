@@ -1,9 +1,11 @@
 # GitHub Copilot Instructions for Baseroo
 
 ## Project Overview
+
 Baseroo is a TypeScript library that converts positive & negative float values from one base to another between bases 2-64. It's published as an npm package with comprehensive CI/CD, testing, and quality assurance processes.
 
 ## Pre-Commit Requirements
+
 **CRITICAL**: Before committing and pushing any code changes, you MUST run these commands and ensure they all pass:
 
 ```bash
@@ -25,6 +27,7 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 ## Code Style & Standards
 
 ### TypeScript
+
 - Use strict TypeScript with all strict checks enabled
 - Target ES5 for maximum compatibility
 - Include explicit return types for public functions
@@ -33,9 +36,10 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 - Use meaningful variable and function names
 
 ### Code Quality
-- ESLint configuration is defined in `package.json`
+
+- ESLint configuration is defined in `eslint.config.js` (flat config)
 - Use `@typescript-eslint/eslint-plugin` rules
-- Enable deprecation warnings with `eslint-plugin-deprecation`
+- Enable deprecation warnings with `@typescript-eslint/no-deprecated`
 - Follow Prettier formatting rules:
   - Use tabs (tabWidth: 2)
   - Single quotes
@@ -45,6 +49,7 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
   - Arrow parentheses: always
 
 ### Error Handling
+
 - Use custom error classes that extend `BaseError` from the `make-error` package
 - Provide descriptive error messages with context
 - Example error classes: `InvalidDigitError`, `InvalidBaseError`
@@ -52,12 +57,14 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 ## Testing Requirements
 
 ### Test Framework
+
 - Use Jest with TypeScript support (`ts-jest`)
 - Test environment: Node.js
 - Bail on first test failure
 - **100% code coverage required** - this is enforced and builds will fail if coverage drops
 
 ### Test Structure
+
 - Test files should mirror the source structure
 - Use descriptive test names that explain the behavior being tested
 - Test both positive and negative cases
@@ -65,6 +72,7 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 - Test floating point precision limits
 
 ### Coverage
+
 - Line coverage must be 100%
 - Coverage reports are sent to Codecov
 - Use `--onlyChanged` flag in pre-commit hooks for performance
@@ -72,6 +80,7 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 ## Build & Distribution
 
 ### Build System
+
 - Use Microbundle for building the library
 - Source entry point: `src/baseroo.ts`
 - Output formats: CJS, ESM, UMD
@@ -79,6 +88,7 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 - Create source maps
 
 ### Package Configuration
+
 - Type: "module" (ES modules)
 - Export multiple formats for compatibility
 - Include only `dist` and `readme.md` in published package
@@ -87,15 +97,18 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 ## Git & CI/CD
 
 ### Commit Messages
+
 - Follow Conventional Commits format
 - Use commitlint with `@commitlint/config-conventional`
 - Scope and subject case rules are relaxed (allow sentence-case)
 
 ### Husky Hooks
+
 - **Pre-commit**: Runs Jest on changed files and lint-staged
 - **Commit-msg**: Validates commit message format
 
 ### GitHub Actions
+
 - **Node CI workflow** runs on push to main and PRs
 - Tests on Node.js versions: 18.x, 20.x, 22.x
 - Steps: npm ci, build, lint, test, coverage upload
@@ -103,22 +116,26 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 - **CodeQL analysis** for security scanning
 
 ### Lint-staged Configuration
+
 - JavaScript files: `eslint --cache --fix`
 - JS/CSS/MD files: `prettier --write`
 
 ## Dependencies
 
 ### Runtime Dependencies
+
 - `make-error`: For custom error classes
 
 ### Development Dependencies
+
 - Core tools: TypeScript, Jest, ESLint, Prettier, Husky
-- TypeScript tooling: ts-jest, ts-node, @typescript-eslint/*
+- TypeScript tooling: ts-jest, ts-node, @typescript-eslint/\*
 - Build: microbundle
 - Release: semantic-release
 - Quality: commitlint, lint-staged
 
 ## File Structure
+
 ```
 .
 ├── src/
@@ -136,6 +153,7 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 ```
 
 ## Key Algorithms & Logic
+
 - Base conversion using alphabet strings for digit representation
 - BigInt arithmetic for integer precision
 - Floating point handling with configurable precision (10 decimal places)
@@ -156,6 +174,7 @@ When making changes to this project:
 ## Common Tasks
 
 ### Adding a new feature:
+
 1. Write tests first (TDD approach)
 2. Implement the feature
 3. Ensure 100% coverage
@@ -163,12 +182,14 @@ When making changes to this project:
 5. Run all pre-commit checks
 
 ### Fixing a bug:
+
 1. Write a failing test that reproduces the bug
 2. Fix the bug
 3. Ensure the test passes and coverage remains 100%
 4. Run all pre-commit checks
 
 ### Updating dependencies:
+
 1. Test thoroughly after updates
 2. Check for breaking changes
 3. Update any affected code

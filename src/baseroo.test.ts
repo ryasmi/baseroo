@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { test } from '@jest/globals'
 import { convertBase, defaultAlphabet, InvalidBaseError, InvalidDigitError } from './baseroo'
 
 test('convertBase should convert base 16 to 10', () => {
