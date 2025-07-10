@@ -30,9 +30,6 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 	return x * p2 * p2
 }
 
-export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
-const defaultAlphabetRange = defaultAlphabet.split('')
-
 function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): bigint {
 	const fromBase = BigInt(fromAlphabet.length)
 
@@ -83,9 +80,7 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	return value
 }
 
-export function convertBase(value: string, fromBase: number, toBase: number): string {
-	const range = defaultAlphabetRange
-
+function convertBaseShim(range: string[], value: string, fromBase: number, toBase: number): string {
 	if (fromBase < 2 || fromBase > range.length) {
 		throw new InvalidBaseError('fromBase', fromBase, range.length)
 	}
@@ -111,3 +106,11 @@ export function convertBase(value: string, fromBase: number, toBase: number): st
 
 	return toBaseSign + toBaseInteger
 }
+
+export function customAlphabet(alphabet: string) {
+	return convertBaseShim.bind(null, alphabet.split(''))
+}
+
+export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
+
+export const convertBase = customAlphabet(defaultAlphabet)
