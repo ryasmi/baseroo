@@ -3,7 +3,7 @@
 	"extends": ["config:js-lib"],
 	"platformCommit": "enabled",
 	"automergeType": "pr",
-	"schedule": "at any time",
+	"schedule": "before 7am",
 	"rebaseWhen": "conflicted",
 	"rangeStrategy": "replace",
 	"major": {
@@ -21,6 +21,6 @@
 	"lockFileMaintenance": {
 		"automerge": true,
 		"enabled": true,
-		"schedule": ["before 7am every weekday"]
+		"schedule": ["before 7am"]
 	}
 }
