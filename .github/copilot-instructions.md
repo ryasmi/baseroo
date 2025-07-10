@@ -37,9 +37,9 @@ If any of these commands fail, fix the issues before committing. The CI pipeline
 
 ### Code Quality
 
-- ESLint configuration is defined in `package.json`
+- ESLint configuration is defined in `eslint.config.js` (flat config)
 - Use `@typescript-eslint/eslint-plugin` rules
-- Enable deprecation warnings with `eslint-plugin-deprecation`
+- Enable deprecation warnings with `@typescript-eslint/no-deprecated`
 - Follow Prettier formatting rules:
   - Use tabs (tabWidth: 2)
   - Single quotes

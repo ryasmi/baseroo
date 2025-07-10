@@ -65,7 +65,6 @@
 		}
 	},
 	"prettier": {
-		"filepath": "**/*.{js,ts,json,tsx,jsx}",
 		"trailingComma": "es5",
 		"tabWidth": 2,
 		"useTabs": true,
