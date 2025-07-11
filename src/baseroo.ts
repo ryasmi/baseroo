@@ -1,5 +1,7 @@
 import { BaseError } from 'make-error'
 
+export type BaseInput = number | string
+
 export class InvalidDigitError extends BaseError {
 	constructor(
 		public digit: string,
@@ -83,29 +85,38 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	return value
 }
 
-export function convertBase(value: string, fromBase: number, toBase: number): string {
-	const range = defaultAlphabetRange
+export function convertBase(value: string, fromBase: BaseInput, toBase: BaseInput): string {
+	// Determine if bases are numbers or custom alphabets
+	const fromIsCustom = typeof fromBase === 'string'
+	const toIsCustom = typeof toBase === 'string'
 
-	if (fromBase < 2 || fromBase > range.length) {
-		throw new InvalidBaseError('fromBase', fromBase, range.length)
+	// Get alphabets and numeric bases
+	const fromAlphabet = fromIsCustom
+		? fromBase.split('')
+		: defaultAlphabetRange.slice(0, fromBase as number)
+	const toAlphabet = toIsCustom ? toBase.split('') : defaultAlphabetRange.slice(0, toBase as number)
+	const fromBaseNumber = fromIsCustom ? fromBase.length : (fromBase as number)
+	const toBaseNumber = toIsCustom ? toBase.length : (toBase as number)
+
+	// Validate bases
+	if (fromBaseNumber < 2 || (!fromIsCustom && fromBaseNumber > defaultAlphabetRange.length)) {
+		throw new InvalidBaseError('fromBase', fromBaseNumber, defaultAlphabetRange.length)
 	}
-	if (toBase < 2 || toBase > range.length) {
-		throw new InvalidBaseError('toBase', toBase, range.length)
+	if (toBaseNumber < 2 || (!toIsCustom && toBaseNumber > defaultAlphabetRange.length)) {
+		throw new InvalidBaseError('toBase', toBaseNumber, defaultAlphabetRange.length)
 	}
 
 	const isNegative = value[0] === '-'
 	const toBaseSign = isNegative ? '-' : ''
 	const absoluteValue = isNegative ? value.substring(1) : value
 	const [integerPart, fractionalPart = ''] = absoluteValue.split('.')
-	const fromRange = range.slice(0, fromBase)
-	const toRange = range.slice(0, toBase)
 
-	const base10Integer = convertToBase10Integer(integerPart, fromRange)
-	const toBaseInteger = convertFromBase10Integer(base10Integer, toRange)
+	const base10Integer = convertToBase10Integer(integerPart, fromAlphabet)
+	const toBaseInteger = convertFromBase10Integer(base10Integer, toAlphabet)
 
 	if (fractionalPart !== '') {
-		const base10Fractional = convertToBase10Fractional(fractionalPart, fromRange)
-		const toBaseFractional = convertFromBase10Fractional(base10Fractional, toRange)
+		const base10Fractional = convertToBase10Fractional(fractionalPart, fromAlphabet)
+		const toBaseFractional = convertFromBase10Fractional(base10Fractional, toAlphabet)
 		return toBaseSign + toBaseInteger + '.' + toBaseFractional
 	}
 
