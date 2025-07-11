@@ -99,3 +99,9 @@ test('convertBase should convert negative float base 16 to 10', () => {
 	const expectedOutput = '-143.5'
 	assert.strictEqual(actualOutput, expectedOutput)
 })
+
+test('constrain should error for custom alphabet with insufficient length', () => {
+	assert.throws(() => {
+		convertBase('1', '0', 10)
+	}, InvalidBaseError)
+})

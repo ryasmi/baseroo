@@ -12,15 +12,15 @@
 
 ## Tasks
 
-- [ ] 1.0 Update TypeScript types and function signatures to support custom alphabets
+- [x] 1.0 Update TypeScript types and function signatures to support custom alphabets
   - [x] 1.1 Modify function parameter types to accept `number | string` for `fromBase` and `toBase`
   - [x] 1.2 Update TypeScript interface definitions to reflect union types
   - [x] 1.3 Ensure type exports are updated for external consumers
 - [ ] 2.0 Implement custom alphabet detection and base determination logic
-  - [ ] 2.1 Create helper function to determine if a parameter is a number or string
-  - [ ] 2.2 Implement logic to calculate base from custom alphabet string length
-  - [ ] 2.3 Add validation for minimum alphabet length (base 2 requires at least 2 characters)
-  - [ ] 2.4 Create character-to-index mapping functions for custom alphabets
+  - [x] 2.1 Create helper function to determine if a parameter is a number or string
+  - [x] 2.2 Implement logic to calculate base from custom alphabet string length
+  - [x] 2.3 Add validation for minimum alphabet length (base 2 requires at least 2 characters)
+  - [x] 2.4 Create character-to-index mapping functions for custom alphabets
 - [ ] 3.0 Modify core conversion algorithms to work with custom alphabets
   - [ ] 3.1 Update digit parsing logic to handle custom alphabet characters
   - [ ] 3.2 Modify number-to-string conversion to use custom alphabet characters

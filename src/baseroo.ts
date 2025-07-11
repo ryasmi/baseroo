@@ -42,10 +42,7 @@ function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): b
 		.split('')
 		.reverse()
 		.reduce((carry, digit, index) => {
-			const fromIndex = fromAlphabet.indexOf(digit)
-			if (fromIndex === -1) {
-				throw new InvalidDigitError(digit, fromAlphabet.length)
-			}
+			const fromIndex = getCharacterIndex(digit, fromAlphabet)
 			return carry + BigInt(fromIndex) * bigIntPow(fromBase, BigInt(index))
 		}, BigInt(0))
 }
@@ -53,10 +50,7 @@ function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): b
 function convertToBase10Fractional(fractionalValue: string, fromAlphabet: string[]): number {
 	const fromBase = fromAlphabet.length
 	return fractionalValue.split('').reduce((carry, digit, index) => {
-		const fromIndex = fromAlphabet.indexOf(digit)
-		if (fromIndex === -1) {
-			throw new InvalidDigitError(digit, fromAlphabet.length)
-		}
+		const fromIndex = getCharacterIndex(digit, fromAlphabet)
 		return carry + fromIndex / fromBase ** (index + 1)
 	}, 0)
 }
@@ -66,7 +60,8 @@ function convertFromBase10Integer(base10Integer: bigint, toAlphabet: string[]): 
 
 	let value = ''
 	while (base10Integer > 0) {
-		value = toAlphabet[Number(base10Integer % toBase)] + value
+		const digitIndex = Number(base10Integer % toBase)
+		value = getCharacterAtIndex(digitIndex, toAlphabet) + value
 		base10Integer = (base10Integer - (base10Integer % toBase)) / toBase
 	}
 
@@ -79,32 +74,63 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	let value = ''
 	for (let i = 0; i < precision && base10Fractional !== 0; i++) {
 		const fractDigit = Math.floor(base10Fractional * toBase)
-		value += toAlphabet[fractDigit]
+		value += getCharacterAtIndex(fractDigit, toAlphabet)
 		base10Fractional = base10Fractional * toBase - fractDigit
 	}
 	return value
 }
 
+function isCustomAlphabet(base: BaseInput): base is string {
+	return typeof base === 'string'
+}
+
+function getBaseNumber(base: BaseInput): number {
+	return isCustomAlphabet(base) ? base.length : base
+}
+
+function validateBase(base: BaseInput, baseName: string): void {
+	const baseNumber = getBaseNumber(base)
+	const isCustom = isCustomAlphabet(base)
+
+	if (baseNumber < 2) {
+		if (isCustom) {
+			throw new InvalidBaseError(baseName, baseNumber, Number.MAX_SAFE_INTEGER)
+		} else {
+			throw new InvalidBaseError(baseName, baseNumber, defaultAlphabetRange.length)
+		}
+	}
+
+	if (!isCustom && baseNumber > defaultAlphabetRange.length) {
+		throw new InvalidBaseError(baseName, baseNumber, defaultAlphabetRange.length)
+	}
+}
+
+function getCharacterIndex(character: string, alphabet: string[]): number {
+	const index = alphabet.indexOf(character)
+	if (index === -1) {
+		throw new InvalidDigitError(character, alphabet.length)
+	}
+	return index
+}
+
+function getCharacterAtIndex(index: number, alphabet: string[]): string {
+	return alphabet[index]
+}
+
 export function convertBase(value: string, fromBase: BaseInput, toBase: BaseInput): string {
 	// Determine if bases are numbers or custom alphabets
-	const fromIsCustom = typeof fromBase === 'string'
-	const toIsCustom = typeof toBase === 'string'
+	const fromIsCustom = isCustomAlphabet(fromBase)
+	const toIsCustom = isCustomAlphabet(toBase)
 
 	// Get alphabets and numeric bases
 	const fromAlphabet = fromIsCustom
 		? fromBase.split('')
 		: defaultAlphabetRange.slice(0, fromBase as number)
 	const toAlphabet = toIsCustom ? toBase.split('') : defaultAlphabetRange.slice(0, toBase as number)
-	const fromBaseNumber = fromIsCustom ? fromBase.length : (fromBase as number)
-	const toBaseNumber = toIsCustom ? toBase.length : (toBase as number)
 
 	// Validate bases
-	if (fromBaseNumber < 2 || (!fromIsCustom && fromBaseNumber > defaultAlphabetRange.length)) {
-		throw new InvalidBaseError('fromBase', fromBaseNumber, defaultAlphabetRange.length)
-	}
-	if (toBaseNumber < 2 || (!toIsCustom && toBaseNumber > defaultAlphabetRange.length)) {
-		throw new InvalidBaseError('toBase', toBaseNumber, defaultAlphabetRange.length)
-	}
+	validateBase(fromBase, 'fromBase')
+	validateBase(toBase, 'toBase')
 
 	const isNegative = value[0] === '-'
 	const toBaseSign = isNegative ? '-' : ''
