@@ -100,7 +100,7 @@ test('convertBase should convert negative float base 16 to 10', () => {
 	assert.strictEqual(actualOutput, expectedOutput)
 })
 
-test('constrain should error for custom alphabet with insufficient length', () => {
+test('convertBase should error for custom alphabet with insufficient length', () => {
 	assert.throws(() => {
 		convertBase('1', '0', 10)
 	}, InvalidBaseError)
