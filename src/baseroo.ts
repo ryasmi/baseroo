@@ -33,13 +33,12 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 }
 
 export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
-const defaultAlphabetRange = defaultAlphabet.split('')
+const defaultAlphabetRange = Array.from(defaultAlphabet)
 
 function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): bigint {
 	const fromBase = BigInt(fromAlphabet.length)
 
-	return integerValue
-		.split('')
+	return Array.from(integerValue)
 		.reverse()
 		.reduce((carry, digit, index) => {
 			const fromIndex = getCharacterIndex(digit, fromAlphabet)
@@ -49,7 +48,7 @@ function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): b
 
 function convertToBase10Fractional(fractionalValue: string, fromAlphabet: string[]): number {
 	const fromBase = fromAlphabet.length
-	return fractionalValue.split('').reduce((carry, digit, index) => {
+	return Array.from(fractionalValue).reduce((carry, digit, index) => {
 		const fromIndex = getCharacterIndex(digit, fromAlphabet)
 		return carry + fromIndex / fromBase ** (index + 1)
 	}, 0)

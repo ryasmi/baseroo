@@ -3,18 +3,16 @@ import { test } from '@jest/globals'
 import { performance } from 'perf_hooks'
 import { convertBase, defaultAlphabet, InvalidBaseError, InvalidDigitError } from './baseroo'
 
-test('convertBase should convert base 16 to 10', () => {
-	const input = '8f'
-	const actualOutput = convertBase(input, 16, 10)
-	const expectedOutput = '143'
-	assert.strictEqual(actualOutput, expectedOutput)
+test('convertBase should convert base 16 to 10 and related conversions', () => {
+	assert.strictEqual(convertBase('8f', 16, 10), '143')
+	assert.strictEqual(convertBase('ff', 16, 10), '255')
 })
 
-test('convertBase should convert base 16 to 2', () => {
-	const base16Input = 'a'
-	const actualOutput = convertBase(base16Input, 16, 2)
-	const expectedOutput = '1010'
-	assert.strictEqual(actualOutput, expectedOutput)
+test('convertBase should convert between various numeric bases', () => {
+	assert.strictEqual(convertBase('a', 16, 2), '1010')
+	assert.strictEqual(convertBase('1010', 2, 10), '10')
+	assert.strictEqual(convertBase('100', 10, 2), '1100100')
+	assert.strictEqual(convertBase('255', 10, 16), 'ff')
 })
 
 test('convertBase should error for invalid digits in interger', () => {
@@ -107,11 +105,10 @@ test('convertBase should convert base 16 float to 10', () => {
 	assert.strictEqual(actualOutput, expectedOutput)
 })
 
-test('convertBase should convert base 16 float to 2', () => {
-	const base16Input = 'a.8'
-	const actualOutput = convertBase(base16Input, 16, 2)
-	const expectedOutput = '1010.1'
-	assert.strictEqual(actualOutput, expectedOutput)
+test('convertBase should convert floating point numbers between bases', () => {
+	assert.strictEqual(convertBase('a.8', 16, 2), '1010.1')
+	assert.strictEqual(convertBase('10.5', 10, 2), '1010.1')
+	assert.strictEqual(convertBase('1010.1', 2, 10), '10.5')
 })
 
 test('convertBase should convert base 16 float to 10 upto a precision of 10', () => {
@@ -121,11 +118,10 @@ test('convertBase should convert base 16 float to 10 upto a precision of 10', ()
 	assert.strictEqual(actualOutput, expectedOutput)
 })
 
-test('convertBase should convert negative base 16 to 10', () => {
-	const input = '-8f'
-	const actualOutput = convertBase(input, 16, 10)
-	const expectedOutput = '-143'
-	assert.strictEqual(actualOutput, expectedOutput)
+test('convertBase should convert negative numbers between bases', () => {
+	assert.strictEqual(convertBase('-8f', 16, 10), '-143')
+	assert.strictEqual(convertBase('-ff', 16, 10), '-255')
+	assert.strictEqual(convertBase('-255', 10, 16), '-ff')
 })
 
 test('convertBase should convert negative float base 16 to 10', () => {
@@ -238,23 +234,6 @@ test('error messages should be descriptive for custom alphabets', () => {
 		assert.ok(error instanceof InvalidBaseError)
 		assert.ok(error.message.includes('1')) // Invalid base number
 	}
-})
-
-// Task 4.1: Backward compatibility tests
-test('backward compatibility - all existing number-based operations work unchanged', () => {
-	// Verify that numeric base operations still work exactly as before
-	assert.strictEqual(convertBase('ff', 16, 10), '255')
-	assert.strictEqual(convertBase('1010', 2, 10), '10')
-	assert.strictEqual(convertBase('100', 10, 2), '1100100')
-	assert.strictEqual(convertBase('255', 10, 16), 'ff')
-
-	// Verify floating point operations
-	assert.strictEqual(convertBase('10.5', 10, 2), '1010.1')
-	assert.strictEqual(convertBase('1010.1', 2, 10), '10.5')
-
-	// Verify negative numbers
-	assert.strictEqual(convertBase('-ff', 16, 10), '-255')
-	assert.strictEqual(convertBase('-255', 10, 16), '-ff')
 })
 
 // Task 4.2: Basic custom alphabet conversions
