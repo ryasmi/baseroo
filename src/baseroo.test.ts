@@ -1,5 +1,6 @@
 import * as assert from 'assert'
 import { test } from '@jest/globals'
+import { performance } from 'perf_hooks'
 import { convertBase, defaultAlphabet, InvalidBaseError, InvalidDigitError } from './baseroo'
 
 test('convertBase should convert base 16 to 10', () => {
@@ -16,18 +17,28 @@ test('convertBase should convert base 16 to 2', () => {
 	assert.strictEqual(actualOutput, expectedOutput)
 })
 
-test('constrain should error for invalid digits in interger', () => {
+test('convertBase should error for invalid digits in interger', () => {
 	const input = '8F'
-	assert.throws(() => {
+	try {
 		convertBase(input, 16, 10)
-	}, InvalidDigitError)
+		assert.fail('Should have thrown InvalidDigitError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidDigitError)
+		assert.strictEqual(error.digit, 'F')
+		assert.strictEqual(error.base, 16)
+	}
 })
 
-test('constrain should error for invalid digits in fractional', () => {
+test('convertBase should error for invalid digits in fractional', () => {
 	const input = '8f.F'
-	assert.throws(() => {
+	try {
 		convertBase(input, 16, 10)
-	}, InvalidDigitError)
+		assert.fail('Should have thrown InvalidDigitError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidDigitError)
+		assert.strictEqual(error.digit, 'F')
+		assert.strictEqual(error.base, 16)
+	}
 })
 
 test('convertBase should convert an empty input string to 0', () => {
@@ -45,24 +56,48 @@ test('convertBase should convert BigInts too', () => {
 	assert.strictEqual(actualOutput, input)
 })
 
-test('constrain should error for invalid fromBase', () => {
+test('convertBase should error for invalid fromBase', () => {
 	const input = '8f'
-	assert.throws(() => {
+	try {
 		convertBase(input, 1, 10)
-	}, InvalidBaseError)
-	assert.throws(() => {
+		assert.fail('Should have thrown InvalidBaseError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidBaseError)
+		assert.strictEqual(error.ref, 'fromBase')
+		assert.strictEqual(error.base, 1)
+		assert.strictEqual(error.maxBase, defaultAlphabet.length)
+	}
+	try {
 		convertBase(input, defaultAlphabet.length + 1, 10)
-	}, InvalidBaseError)
+		assert.fail('Should have thrown InvalidBaseError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidBaseError)
+		assert.strictEqual(error.ref, 'fromBase')
+		assert.strictEqual(error.base, defaultAlphabet.length + 1)
+		assert.strictEqual(error.maxBase, defaultAlphabet.length)
+	}
 })
 
-test('constrain should error for invalid toBase', () => {
+test('convertBase should error for invalid toBase', () => {
 	const input = '8f'
-	assert.throws(() => {
+	try {
 		convertBase(input, 16, 1)
-	}, InvalidBaseError)
-	assert.throws(() => {
+		assert.fail('Should have thrown InvalidBaseError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidBaseError)
+		assert.strictEqual(error.ref, 'toBase')
+		assert.strictEqual(error.base, 1)
+		assert.strictEqual(error.maxBase, defaultAlphabet.length)
+	}
+	try {
 		convertBase(input, 16, defaultAlphabet.length + 1)
-	}, InvalidBaseError)
+		assert.fail('Should have thrown InvalidBaseError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidBaseError)
+		assert.strictEqual(error.ref, 'toBase')
+		assert.strictEqual(error.base, defaultAlphabet.length + 1)
+		assert.strictEqual(error.maxBase, defaultAlphabet.length)
+	}
 })
 
 test('convertBase should convert base 16 float to 10', () => {
@@ -101,9 +136,15 @@ test('convertBase should convert negative float base 16 to 10', () => {
 })
 
 test('convertBase should error for custom alphabet with insufficient length', () => {
-	assert.throws(() => {
+	try {
 		convertBase('1', '0', 10)
-	}, InvalidBaseError)
+		assert.fail('Should have thrown InvalidBaseError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidBaseError)
+		assert.strictEqual(error.ref, 'fromBase')
+		assert.strictEqual(error.base, 1)
+		assert.strictEqual(error.maxBase, Number.MAX_SAFE_INTEGER)
+	}
 })
 
 test('convertBase should handle custom alphabet digit parsing', () => {
@@ -148,19 +189,35 @@ test('convertBase should handle precision limits consistently with custom alphab
 
 test('error handling should work properly with custom alphabets', () => {
 	// Test invalid character in custom alphabet
-	assert.throws(() => {
+	try {
 		convertBase('C', 'AB', 10) // 'C' is not in alphabet 'AB'
-	}, InvalidDigitError)
+		assert.fail('Should have thrown InvalidDigitError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidDigitError)
+		assert.strictEqual(error.digit, 'C')
+		assert.strictEqual(error.base, 2)
+	}
 
 	// Test custom alphabet with insufficient length
-	assert.throws(() => {
+	try {
 		convertBase('1', 'A', 10) // Single character alphabet = base 1, which is invalid
-	}, InvalidBaseError)
+		assert.fail('Should have thrown InvalidBaseError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidBaseError)
+		assert.strictEqual(error.ref, 'fromBase')
+		assert.strictEqual(error.base, 1)
+		assert.strictEqual(error.maxBase, Number.MAX_SAFE_INTEGER)
+	}
 
 	// Test invalid character in fractional part with custom alphabet
-	assert.throws(() => {
+	try {
 		convertBase('A.C', 'AB', 10) // 'C' is not in alphabet 'AB'
-	}, InvalidDigitError)
+		assert.fail('Should have thrown InvalidDigitError')
+	} catch (error) {
+		assert.ok(error instanceof InvalidDigitError)
+		assert.strictEqual(error.digit, 'C')
+		assert.strictEqual(error.base, 2)
+	}
 })
 
 test('error messages should be descriptive for custom alphabets', () => {
@@ -313,18 +370,18 @@ test('performance tests - custom alphabets should not be significantly slower', 
 	const testValue = '12345.6789'
 
 	// Measure numeric base performance
-	const numericStart = Date.now()
+	const numericStart = performance.now()
 	for (let i = 0; i < iterations; i++) {
 		convertBase(testValue, 10, 16)
 	}
-	const numericTime = Date.now() - numericStart
+	const numericTime = performance.now() - numericStart
 
 	// Measure custom alphabet performance
-	const customStart = Date.now()
+	const customStart = performance.now()
 	for (let i = 0; i < iterations; i++) {
 		convertBase(testValue, 10, '0123456789ABCDEF')
 	}
-	const customTime = Date.now() - customStart
+	const customTime = performance.now() - customStart
 
 	// Custom alphabet should not be more than 5x slower than numeric
 	// This is a reasonable threshold considering the additional string operations
@@ -339,9 +396,9 @@ test('performance tests - large number conversions with custom alphabets', () =>
 	const largeNumber = '123456789012345678901234567890'
 	const customAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-	const start = Date.now()
+	const start = performance.now()
 	const result = convertBase(largeNumber, 10, customAlphabet)
-	const duration = Date.now() - start
+	const duration = performance.now() - start
 
 	// Should complete within reasonable time (under 1000ms)
 	assert.ok(duration < 1000, `Large number conversion too slow: ${duration}ms`)
