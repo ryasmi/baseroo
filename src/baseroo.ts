@@ -1,5 +1,7 @@
 import { BaseError } from 'make-error'
 
+export type BaseInput = number | string
+
 export class InvalidDigitError extends BaseError {
 	constructor(
 		public digit: string,
@@ -31,30 +33,23 @@ function bigIntPow(x: bigint, y: bigint): bigint {
 }
 
 export const defaultAlphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'
-const defaultAlphabetRange = defaultAlphabet.split('')
+const defaultAlphabetRange = Array.from(defaultAlphabet)
 
 function convertToBase10Integer(integerValue: string, fromAlphabet: string[]): bigint {
 	const fromBase = BigInt(fromAlphabet.length)
 
-	return integerValue
-		.split('')
+	return Array.from(integerValue)
 		.reverse()
 		.reduce((carry, digit, index) => {
-			const fromIndex = fromAlphabet.indexOf(digit)
-			if (fromIndex === -1) {
-				throw new InvalidDigitError(digit, fromAlphabet.length)
-			}
+			const fromIndex = getCharacterIndex(digit, fromAlphabet)
 			return carry + BigInt(fromIndex) * bigIntPow(fromBase, BigInt(index))
 		}, BigInt(0))
 }
 
 function convertToBase10Fractional(fractionalValue: string, fromAlphabet: string[]): number {
 	const fromBase = fromAlphabet.length
-	return fractionalValue.split('').reduce((carry, digit, index) => {
-		const fromIndex = fromAlphabet.indexOf(digit)
-		if (fromIndex === -1) {
-			throw new InvalidDigitError(digit, fromAlphabet.length)
-		}
+	return Array.from(fractionalValue).reduce((carry, digit, index) => {
+		const fromIndex = getCharacterIndex(digit, fromAlphabet)
 		return carry + fromIndex / fromBase ** (index + 1)
 	}, 0)
 }
@@ -64,7 +59,8 @@ function convertFromBase10Integer(base10Integer: bigint, toAlphabet: string[]): 
 
 	let value = ''
 	while (base10Integer > 0) {
-		value = toAlphabet[Number(base10Integer % toBase)] + value
+		const digitIndex = Number(base10Integer % toBase)
+		value = toAlphabet[digitIndex] + value
 		base10Integer = (base10Integer - (base10Integer % toBase)) / toBase
 	}
 
@@ -83,29 +79,63 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	return value
 }
 
-export function convertBase(value: string, fromBase: number, toBase: number): string {
-	const range = defaultAlphabetRange
+function isCustomAlphabet(base: BaseInput): base is string {
+	return typeof base === 'string'
+}
 
-	if (fromBase < 2 || fromBase > range.length) {
-		throw new InvalidBaseError('fromBase', fromBase, range.length)
+function getBaseNumber(base: BaseInput): number {
+	return isCustomAlphabet(base) ? base.length : base
+}
+
+function validateBase(base: BaseInput, baseName: string): void {
+	const baseNumber = getBaseNumber(base)
+	const isCustom = isCustomAlphabet(base)
+
+	if (baseNumber < 2) {
+		if (isCustom) {
+			throw new InvalidBaseError(baseName, baseNumber, Number.MAX_SAFE_INTEGER)
+		} else {
+			throw new InvalidBaseError(baseName, baseNumber, defaultAlphabetRange.length)
+		}
 	}
-	if (toBase < 2 || toBase > range.length) {
-		throw new InvalidBaseError('toBase', toBase, range.length)
+
+	if (!isCustom && baseNumber > defaultAlphabetRange.length) {
+		throw new InvalidBaseError(baseName, baseNumber, defaultAlphabetRange.length)
 	}
+}
+
+function getCharacterIndex(character: string, alphabet: string[]): number {
+	const index = alphabet.indexOf(character)
+	if (index === -1) {
+		throw new InvalidDigitError(character, alphabet.length)
+	}
+	return index
+}
+
+function getAlphabet(base: BaseInput): string[] {
+	return isCustomAlphabet(base) ? Array.from(base) : defaultAlphabetRange.slice(0, base as number)
+}
+
+export function convertBase(value: string, fromBase: BaseInput, toBase: BaseInput): string {
+	// Get alphabets
+	const fromAlphabet = getAlphabet(fromBase)
+	const toAlphabet = getAlphabet(toBase)
+
+	// Validate bases
+	validateBase(fromBase, 'fromBase')
+	validateBase(toBase, 'toBase')
 
 	const isNegative = value[0] === '-'
 	const toBaseSign = isNegative ? '-' : ''
 	const absoluteValue = isNegative ? value.substring(1) : value
 	const [integerPart, fractionalPart = ''] = absoluteValue.split('.')
-	const fromRange = range.slice(0, fromBase)
-	const toRange = range.slice(0, toBase)
 
-	const base10Integer = convertToBase10Integer(integerPart, fromRange)
-	const toBaseInteger = convertFromBase10Integer(base10Integer, toRange)
+	const base10Integer = convertToBase10Integer(integerPart, fromAlphabet)
+	const toBaseInteger = convertFromBase10Integer(base10Integer, toAlphabet)
 
 	if (fractionalPart !== '') {
-		const base10Fractional = convertToBase10Fractional(fractionalPart, fromRange)
-		const toBaseFractional = convertFromBase10Fractional(base10Fractional, toRange)
+		const base10Fractional = convertToBase10Fractional(fractionalPart, fromAlphabet)
+		const toBaseFractional = convertFromBase10Fractional(base10Fractional, toAlphabet)
 		return toBaseSign + toBaseInteger + '.' + toBaseFractional
 	}
 
