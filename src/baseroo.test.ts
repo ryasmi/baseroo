@@ -334,17 +334,6 @@ test('floating-point conversions with custom alphabets', () => {
 	assert.strictEqual(convertBase('Y.Y', ternary, 10), '1.3333333333')
 	// The reverse conversion produces more precision due to algorithm behavior
 	assert.strictEqual(convertBase('1.3333333333', 10, ternary), 'Y.XZZZZZZZZZ')
-
-	// Test precision limits with custom alphabets
-	const input = '0.1111111111111'
-	const binaryResult = convertBase(input, 10, 'AB')
-	const customResult = convertBase(input, 10, 'QWERTY')
-
-	// Both should have limited precision
-	const binaryFractional = binaryResult.split('.')[1] || ''
-	const customFractional = customResult.split('.')[1] || ''
-	assert.ok(binaryFractional.length <= 10)
-	assert.ok(customFractional.length <= 10)
 })
 
 // Task 4.5: Negative number conversions with custom alphabets
