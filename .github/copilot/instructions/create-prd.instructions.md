@@ -4,12 +4,18 @@
 
 To guide an AI assistant in creating a detailed Product Requirements Document (PRD) in Markdown format, based on an initial user prompt. The PRD should be clear, actionable, and suitable for a junior developer to understand and implement the feature.
 
+## Output
+
+- **Format:** Markdown (`.md`)
+- **Location:** `/.github/copilot/specs/[feature-name]/`
+- **Filename:** `design.md`
+
 ## Process
 
 1.  **Receive Initial Prompt:** The user provides a brief description or request for a new feature or functionality.
 2.  **Ask Clarifying Questions:** Before writing the PRD, the AI _must_ ask clarifying questions to gather sufficient detail. The goal is to understand the "what" and "why" of the feature, not necessarily the "how" (which the developer will figure out). Make sure to provide options in letter/number lists so I can respond easily with my selections.
 3.  **Generate PRD:** Based on the initial prompt and the user's answers to the clarifying questions, generate a PRD using the structure outlined below.
-4.  **Save PRD:** Save the generated document as `prd-[feature-name].md` inside the `/tasks` directory.
+4.  **Save PRD:** Save the generated document as `design.md` inside the `/.github/copilot/specs/[feature-name]` directory.
 
 ## Clarifying Questions (Examples)
 
@@ -42,12 +48,6 @@ The generated PRD should include the following sections:
 ## Target Audience
 
 Assume the primary reader of the PRD is a **junior developer**. Therefore, requirements should be explicit, unambiguous, and avoid jargon where possible. Provide enough detail for them to understand the feature's purpose and core logic.
-
-## Output
-
-- **Format:** Markdown (`.md`)
-- **Location:** `/tasks/`
-- **Filename:** `prd-[feature-name].md`
 
 ## Final instructions
 

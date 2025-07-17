@@ -61,7 +61,7 @@ function convertFromBase10Integer(base10Integer: bigint, toAlphabet: string[]): 
 	let value = ''
 	while (base10Integer > 0) {
 		const digitIndex = Number(base10Integer % toBase)
-		value = getCharacterAtIndex(digitIndex, toAlphabet) + value
+		value = toAlphabet[digitIndex] + value
 		base10Integer = (base10Integer - (base10Integer % toBase)) / toBase
 	}
 
@@ -74,7 +74,7 @@ function convertFromBase10Fractional(base10Fractional: number, toAlphabet: strin
 	let value = ''
 	for (let i = 0; i < precision && base10Fractional !== 0; i++) {
 		const fractDigit = Math.floor(base10Fractional * toBase)
-		value += getCharacterAtIndex(fractDigit, toAlphabet)
+		value += toAlphabet[fractDigit]
 		base10Fractional = base10Fractional * toBase - fractDigit
 	}
 	return value
@@ -113,20 +113,14 @@ function getCharacterIndex(character: string, alphabet: string[]): number {
 	return index
 }
 
-function getCharacterAtIndex(index: number, alphabet: string[]): string {
-	return alphabet[index]
+function getAlphabet(base: BaseInput): string[] {
+	return isCustomAlphabet(base) ? Array.from(base) : defaultAlphabetRange.slice(0, base as number)
 }
 
 export function convertBase(value: string, fromBase: BaseInput, toBase: BaseInput): string {
-	// Determine if bases are numbers or custom alphabets
-	const fromIsCustom = isCustomAlphabet(fromBase)
-	const toIsCustom = isCustomAlphabet(toBase)
-
-	// Get alphabets and numeric bases
-	const fromAlphabet = fromIsCustom
-		? fromBase.split('')
-		: defaultAlphabetRange.slice(0, fromBase as number)
-	const toAlphabet = toIsCustom ? toBase.split('') : defaultAlphabetRange.slice(0, toBase as number)
+	// Get alphabets
+	const fromAlphabet = getAlphabet(fromBase)
+	const toAlphabet = getAlphabet(toBase)
 
 	// Validate bases
 	validateBase(fromBase, 'fromBase')
