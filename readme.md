@@ -95,10 +95,10 @@ Custom alphabets allow you to define your own character sets for specialized enc
 convertBase('1010', 2, 'AB') // 'BABA' (A=0, B=1)
 convertBase('BABA', 'AB', 10) // '10'
 
-// Custom hexadecimal
-const customHex = 'QWERTYUIOPAS'
-convertBase('255', 10, customHex) // 'QWP'
-convertBase('QWP', customHex, 10) // '255'
+// Custom base 12 (duodecimal)
+const customBase12 = 'QWERTYUIOPAS'
+convertBase('255', 10, customBase12) // 'QWP'
+convertBase('QWP', customBase12, 10) // '255'
 ```
 
 ### Practical Use Cases
