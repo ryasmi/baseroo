@@ -1,14 +1,8 @@
-# GitHub Copilot Instructions for Baseroo
-
-## Project Overview
-
-Baseroo is a TypeScript library that converts positive & negative float values from one base to another between bases 2-64. It's published as an npm package with comprehensive CI/CD, testing, and quality assurance processes. This is a public repository on Github (ryasmi/baseroo) and published on NPM as `baseroo`.
-
-_Update this `.github/copilot-instructions.md` file if you think other things should be included in the overview._
+# CLAUDE.md
 
 ## Purpose
 
-This file directs Github Copilot to use your personal Agent OS standards for all development work. These global standards define your preferred way of building software across all projects.
+This file directs Claude Code to use your personal Agent OS standards for all development work. These global standards define your preferred way of building software across all projects.
 
 ## Global Standards
 
