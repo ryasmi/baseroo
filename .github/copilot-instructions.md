@@ -24,6 +24,7 @@ This file directs Github Copilot to use your personal Agent OS standards for all
 - **Plan Features:** @/.agent-os/instructions/create-spec.md
 - **Execute Tasks:** @/.agent-os/instructions/execute-tasks.md
 - **Analyze Existing Code:** @/.agent-os/instructions/analyze-product.md
+- **Review Renovate PR:** @/.agent-os/instructions/review-renovate-pr.md
 
 ## How These Work Together
 
@@ -39,6 +40,7 @@ You can invoke Agent OS commands directly:
 - `/create-spec` - Plan a new feature
 - `/execute-tasks` - Build and ship code
 - `/analyze-product` - Add Agent OS to existing code
+- `/review-renovate-pull-request` - Review a Renovate bot pull request
 
 ## Important Notes
 
