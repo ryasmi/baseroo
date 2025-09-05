@@ -1,6 +1,4 @@
 name: 'CodeQL'
-permissions:
-  contents: read
 
 on:
   push:
@@ -14,6 +12,9 @@ on:
 jobs:
   analyse:
     name: Analyse
+    permissions:
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
 
     steps:
