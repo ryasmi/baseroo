@@ -6,6 +6,7 @@
 	"schedule": "before 7am",
 	"rebaseWhen": "conflicted",
 	"rangeStrategy": "replace",
+	"minimumReleaseAge": "3 days",
 	"major": {
 		"automerge": false,
 		"prConcurrentLimit": 3
@@ -21,6 +22,6 @@
 	"lockFileMaintenance": {
 		"automerge": true,
 		"enabled": true,
-		"schedule": ["before 7am"]
+		"schedule": ["before 7am every weekday"]
 	}
 }
