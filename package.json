@@ -25,7 +25,9 @@
 	"scripts": {
 		"prepare": "husky",
 		"test": "jest",
-		"build": "microbundle"
+		"build": "microbundle",
+		"lint": "eslint src",
+		"lockfile:lint": "lockfile-lint --path package-lock.json --type npm --allowed-hosts npm --validate-https"
 	},
 	"dependencies": {
 		"make-error": "^1.3.6"
@@ -45,6 +47,7 @@
 		"husky": "9.1.7",
 		"jest": "30.2.0",
 		"lint-staged": "16.2.6",
+		"lockfile-lint": "4.14.1",
 		"microbundle": "0.15.1",
 		"prettier": "3.6.2",
 		"pretty-quick": "4.2.2",
